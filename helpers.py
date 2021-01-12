@@ -7,7 +7,14 @@ def getNormFactor(setname,year,configPath,genEventCount):
     if isinstance(configPath,str): config = OpenJSON(configPath)
     else: config = configPath
     cuts = config['CUTS'][year]
-    lumi = config['lumi']
+    lumi = config['lumi'+str(year)]
+
+    # Deal with unique ttbar cases
+    if setname == 'ttbar' and year == '16':
+        setname = 'ttbar'
+    elif setname == 'ttbar' and (year == '17' or year == '18'):
+        setname = 'ttbar-allhad'
+
     if setname in config['XSECS'].keys(): 
         xsec = config['XSECS'][setname]
     else:

@@ -1,21 +1,22 @@
 {
     "GLOBAL": {
         "HELP": "The 'global' item can be used to set global variables inside of this json configuration file. This is the only place where you can customize the keys of dictionaries. For example, you could store 'dir': 'path/to/my/files/' and then later use 'dir' instead of writing the same file path multiple times",
-        "path": "/eos/user/c/cmsdas/long-exercises/bstarToTW/bstar_presel",
-        "RPFTAG":"default_18__mt"
+        "path": "/uscms_data/d3/lcorcodi/BStar13TeV/CMSSW_10_2_0/src/BStar13TeV/rootfiles",
+        "RPFTAG":"default_run2__mt"
     },
 
     "OPTIONS": {
-        "name":"SR18",
-        "tag":"bstar",
+        "name":"SR",
+        "tag":"dataBsUnblind",
         "blindedFit":false,
         "blindedPlots":false,
         "plotUncerts":false,
-        "plotTitles":true,
+        "plotTitles":false,
+        "fitGuesses":false,
         "prerun":false,
-        "year":18,
+        "year":2,
         "rpfRatio":{
-            "FILE": "path/smooth_QCD_default.root",
+            "FILE": "path/smooth_QCD_run2.root",
             "HISTPASS": "out_pass_4_5_RPFTAG_mtw",
             "HISTFAIL": "out_fail_4_5_RPFTAG_mtw",
             "SMOOTH":false,
@@ -26,56 +27,141 @@
     "PROCESS": {
         "HELP": "FILE is both the file path relative to the running directory. SYSTEMATICS is a list with all applicable systematic uncertainties listed with names that match those defined in SYSTEMATC. CODE can be 0 (signal), 1 (data), 2 (unchanged MC), 3 (MC to be renormalized)",
         "data_obs": {
-            "FILE": "path/TWpreselection18_data_tau32medium_default.root",
+            "FILE": "path/TWpreselectionRun2_data_tau32medium_default.root",
             "HISTPASS": "MtwvMtPass",
             "HISTFAIL": "MtwvMtFail",
             "SYSTEMATICS":[],
             "CODE": 1
         },
-        "ttbar": {
+        "16_ttbar": {
+            "TITLE":"t#bar{t}",
+            "FILE":"path/TWpreselection16_ttbar_tau32medium_default.root",
+            "HISTPASS":"MtwvMtPass",
+            "HISTFAIL":"MtwvMtFail",
+            "SYSTEMATICS":["lumi","ttbar_xsec"],
+            "COLOR": 2,
+            "CODE": 2
+        },
+        "17_ttbar": {
+            "TITLE":"t#bar{t}",
+            "FILE":"path/TWpreselection17_ttbar_tau32medium_default.root",
+            "HISTPASS":"MtwvMtPass",
+            "HISTFAIL":"MtwvMtFail",
+            "SYSTEMATICS":["lumi","ttbar_xsec"],
+            "COLOR": 2,
+            "CODE": 2
+        },
+        "18_ttbar": {
             "TITLE":"t#bar{t}", 
             "FILE":"path/TWpreselection18_ttbar_tau32medium_default.root",
             "HISTPASS":"MtwvMtPass",
             "HISTFAIL":"MtwvMtFail",
-            "SYSTEMATICS":["lumi18","ttbar_xsec"],
+            "SYSTEMATICS":["lumi","ttbar_xsec"],
             "COLOR": 2,
             "CODE": 2
         },
-        "singletop_tW": {
-            "TITLE":"Single top",
-            "FILE":"path/TWpreselection18_singletop_tW_tau32medium_default.root",
+        "17_ttbar-semilep": {
+            "TITLE":"t#bar{t}",
+            "FILE":"path/TWpreselection17_ttbar-semilep_tau32medium_default.root",
             "HISTPASS":"MtwvMtPass",
             "HISTFAIL":"MtwvMtFail",
-            "SYSTEMATICS":["lumi18","st_tW_xsec"],
-            "COLOR": 861,
-            "CODE": 2,
-            "SMOOTH": true
+            "SYSTEMATICS":["lumi","ttbar_xsec"],
+            "COLOR": 2,
+            "CODE": 2
         },
-        "singletop_tWB": {
-            "TITLE":"Single top",
-            "FILE":"path/TWpreselection18_singletop_tWB_tau32medium_default.root",
-            "HISTPASS":"MtwvMtPass",
-            "HISTFAIL":"MtwvMtFail",
-            "SYSTEMATICS":["lumi18","st_tWB_xsec"],
-            "COLOR": 861,
-            "CODE": 2,
-            "SMOOTH": true
-        },
-        "ttbar-semilep": {
+        "18_ttbar-semilep": {
             "TITLE":"t#bar{t}",
             "FILE":"path/TWpreselection18_ttbar-semilep_tau32medium_default.root",
             "HISTPASS":"MtwvMtPass",
             "HISTFAIL":"MtwvMtFail",
-            "SYSTEMATICS":["lumi18","ttbar_xsec"],
+            "SYSTEMATICS":["lumi","ttbar_xsec"],
             "COLOR": 2,
             "CODE": 2
         },
-        "signalLH2400": {
+        "16_singletop_tW": {
+            "TITLE":"Single top",
+            "FILE":"path/TWpreselection16_singletop_tW_tau32medium_default.root",
+            "HISTPASS":"MtwvMtPass",
+            "HISTFAIL":"MtwvMtFail",
+            "SYSTEMATICS":["lumi","st_tW_xsec"],
+            "COLOR": 861,
+            "CODE": 2,
+            "SMOOTH": true
+        },
+        "16_singletop_tWB": {
+            "TITLE":"Single top",
+            "FILE":"path/TWpreselection16_singletop_tWB_tau32medium_default.root",
+            "HISTPASS":"MtwvMtPass",
+            "HISTFAIL":"MtwvMtFail",
+            "SYSTEMATICS":["lumi","st_tWB_xsec"],
+            "COLOR": 861,
+            "CODE": 2,
+            "SMOOTH": true
+        },
+        "16_signalLH2400": {
+            "TITLE":"b*_{LH} (2.4 TeV)",
+            "FILE": "path/TWpreselection16_signalLH2400_tau32medium_default.root",
+            "HISTPASS": "MtwvMtPass",
+            "HISTFAIL": "MtwvMtFail",
+            "SYSTEMATICS":["lumi"],
+            "CODE": 0,
+            "COLOR": 0
+        },
+        "17_singletop_tW": {
+            "TITLE":"Single top",
+            "FILE":"path/TWpreselection17_singletop_tW_tau32medium_default.root",
+            "HISTPASS":"MtwvMtPass",
+            "HISTFAIL":"MtwvMtFail",
+            "SYSTEMATICS":["lumi","st_tW_xsec"],
+            "COLOR": 861,
+            "CODE": 2,
+            "SMOOTH": true
+        },
+        "17_singletop_tWB": {
+            "TITLE":"Single top",
+            "FILE":"path/TWpreselection17_singletop_tWB_tau32medium_default.root",
+            "HISTPASS":"MtwvMtPass",
+            "HISTFAIL":"MtwvMtFail",
+            "SYSTEMATICS":["lumi","st_tWB_xsec"],
+            "COLOR": 861,
+            "CODE": 2,
+            "SMOOTH": true
+        },
+        "17_signalLH2400": {
+            "TITLE":"b*_{LH} (2.4 TeV)",
+            "FILE": "path/TWpreselection17_signalLH2400_tau32medium_default.root",
+            "HISTPASS": "MtwvMtPass",
+            "HISTFAIL": "MtwvMtFail",
+            "SYSTEMATICS":["lumi"],
+            "CODE": 0,
+            "COLOR": 0
+        },
+        "18_singletop_tW": {
+            "TITLE":"Single top",
+            "FILE":"path/TWpreselection18_singletop_tW_tau32medium_default.root",
+            "HISTPASS":"MtwvMtPass",
+            "HISTFAIL":"MtwvMtFail",
+            "SYSTEMATICS":["lumi","st_tW_xsec"],
+            "COLOR": 861,
+            "CODE": 2,
+            "SMOOTH": true
+        },
+        "18_singletop_tWB": {
+            "TITLE":"Single top",
+            "FILE":"path/TWpreselection18_singletop_tWB_tau32medium_default.root",
+            "HISTPASS":"MtwvMtPass",
+            "HISTFAIL":"MtwvMtFail",
+            "SYSTEMATICS":["lumi","st_tWB_xsec"],
+            "COLOR": 861,
+            "CODE": 2,
+            "SMOOTH": true
+        },
+        "18_signalLH2400": {
             "TITLE":"b*_{LH} (2.4 TeV)",
             "FILE": "path/TWpreselection18_signalLH2400_tau32medium_default.root",
             "HISTPASS": "MtwvMtPass",
             "HISTFAIL": "MtwvMtFail",
-            "SYSTEMATICS":["lumi18"],
+            "SYSTEMATICS":["lumi"],
             "CODE": 0,
             "COLOR": 0
         }
@@ -83,9 +169,9 @@
 
     "SYSTEMATIC": {
         "HELP": "All systematics should be configured here. The info for them will be pulled for each process that calls each systematic. These are classified by codes 0 (symmetric, lnN), 1 (asymmetric, lnN), 2 (shape and in same file as nominal), 3 (shape and NOT in same file as nominal)",
-        "lumi18": {
+        "lumi": {
             "CODE": 0,
-            "VAL": 1.025
+            "VAL": 1.018
         },
         "ttbar_xsec": {
             "CODE": 0,
@@ -113,14 +199,6 @@
             "HISTFAIL_UP": "MtwvMtFailTptBetaup",
             "HISTPASS_DOWN": "MtwvMtPassTptBetadown",
             "HISTFAIL_DOWN": "MtwvMtFailTptBetadown",
-            "SCALE": 1.0
-        },
-        "Trig18": {
-            "CODE": 2,
-            "HISTPASS_UP": "MtwvMtPassTrigup",
-            "HISTFAIL_UP": "MtwvMtFailTrigup",
-            "HISTPASS_DOWN": "MtwvMtPassTrigdown",
-            "HISTFAIL_DOWN": "MtwvMtFailTrigdown",
             "SCALE": 1.0
         }
     },

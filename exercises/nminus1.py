@@ -12,6 +12,8 @@ from TIMBER.Tools.Common import CompileCpp, openJSON
 from TIMBER.Tools.Plot import *
 import helpers
 
+ROOT.gROOT.SetBatch(True) 
+
 # CL options
 parser = OptionParser()
 parser.add_option('-y', '--year', metavar='YEAR', type='string', action='store',
@@ -31,7 +33,7 @@ plotdir = 'plots/' # this is where we'll save your plots
 if not os.path.exists(plotdir):
     os.makedirs(plotdir)
 
-rootfile_path = '/eos/uscms/store/user/lcorcodi/bstar_nano/rootfiles/'
+rootfile_path = 'root://cmsxrootd.fnal.gov///store/user/cmsdas/2021/long_exercises/BstarTW/rootfiles'
 config = openJSON('bstar_config.json')
 cuts = config['CUTS'][options.year]
 

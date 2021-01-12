@@ -12,6 +12,8 @@ from TIMBER.Tools.Common import CompileCpp
 from TIMBER.Tools.Plot import *
 import helpers
 
+ROOT.gROOT.SetBatch(True) 
+
 # CL options
 parser = OptionParser()
 parser.add_option('-y', '--year', metavar='YEAR', type='string', action='store',
@@ -31,7 +33,7 @@ plotdir = 'plots/' # this is where we'll save your plots
 if not os.path.exists(plotdir):
     os.makedirs(plotdir)
 
-rootfile_path = '/eos/uscms/store/user/lcorcodi/bstar_nano/rootfiles/' # this is the directory with the input NanoAOD skimmed files
+rootfile_path = 'root://cmsxrootd.fnal.gov///store/user/cmsdas/2021/long_exercises/BstarTW/rootfiles'
 config = 'bstar_config.json' # holds luminosities and cross sections
 
 # common c++ functions that we will need when looping of the RDataFrame

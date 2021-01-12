@@ -12,6 +12,8 @@ from TIMBER.Tools.Common import CompileCpp
 from TIMBER.Tools.Plot import *
 import helpers
 
+ROOT.gROOT.SetBatch(True) 
+
 # CL options
 parser = OptionParser()
 parser.add_option('-y', '--year', metavar='YEAR', type='string', action='store',
@@ -31,9 +33,7 @@ plotdir = 'plots/' # this is where we'll save your plots
 if not os.path.exists(plotdir):
     os.makedirs(plotdir)
 
-## TODO: change to cmsdas and use root://..
-#rootfile_path = 'root://cmseos.fnal.gov//store/user/lcorcodi/bstar_nano/rootfiles/'
-rootfile_path = '/eos/uscms/store/user/lcorcodi/bstar_nano/rootfiles/'
+rootfile_path = 'root://cmsxrootd.fnal.gov///store/user/cmsdas/2021/long_exercises/BstarTW/rootfiles'
 print(rootfile_path)
 config = 'bstar_config.json' # holds luminosities and cross sections
 

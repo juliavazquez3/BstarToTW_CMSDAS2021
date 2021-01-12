@@ -5,61 +5,49 @@
 ### Setup CMSSW environment:
 ```
 ssh -XY USERNAME@cmslpc-sl7.fnal.gov
-source /cvmfs/cms.cern.ch/cmsset_default.sh 
-export $SCRAM_ARCH=slc7_amd64_gcc820 
+cexport $SCRAM_ARCH=slc7_amd64_gcc820 
 cd nobackup/
 mkdir b2g_exercise/
 cd b2g_exercise/
 cmsrel CMSSW_11_0_1
 cd CMSSW_11_0_1/src
+cmsenv
 ```
 
-### Clone repo:
+### In the `src` directory, clone repo:
 ```
-git clone https://github.com/cmantill/BstarToTW_CMSDAS2021
+git clone https://github.com/cmantill/BstarToTW_CMSDAS2021.git
 ```
 OR fork the code onto your personal project space and set the upstream:
 ```
-git clone https://github.com/<GitHubUsername>/BstarToTW_CMSDAS2021
+git clone https://github.com/<GitHubUsername>/BstarToTW_CMSDAS2021.git
 cd BstarToTW_CMSDAS2021
-git remote add upstream https://github.com/cmantill/BstarToTW_CMSDAS2021
+git remote add upstream https://github.com/cmantill/BstarToTW_CMSDAS2021.git
 git remote -v
 ```
 
-### Create environment
+### In the `src` directory, create environment
 ```
+git clone https://github.com/lcorcodilos/TIMBER.git
 python -m virtualenv timber-env
 source timber-env/bin/activate
-git clone https://github.com/lcorcodilos/TIMBER.git
 cd TIMBER
 source setup.sh
 cd ..
-cmsenv
+python -c 'import TIMBER.Analyzer'
 ```
 
 ## Starting up once environment is set:
 
 Once you have an environment:
 ```
-cd ~/nobackup/b2g_exercise/CMSSW_11_0_1/src/
-source timber-env/bin/activate
-cd BstarToTW_CMSDAS2021/
-source /cvmfs/cms.cern.ch/cmsset_default.sh 
+cd CMSSW_11_0_1/src/
 cmsenv
-```
-
-Sometimes the environment doesn't work (if you have set cmsenv before), in that case we recommend:
-```
-cd ~/nobackup/b2g_exercise/CMSSW_11_0_1/src/
-rm -rf timber-env
-cmsenv
-virtualenv timber-env
 source timber-env/bin/activate
 cd TIMBER/
 git fetch --all
 git checkout master
 python setup.py install
-source setup.sh
 cd ../BstarToTW_CMSDAS2020
 git fetch --all
 git pull origin master
