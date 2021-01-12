@@ -63,9 +63,11 @@ else:
 # Variables we want to plot 
 # These need to be constructed as variables in the RDataFrame
 # We will start with a simple one: the pT of the leading jet, and a more convoluted one: the number of loose b-jets
+
 varnames = {
         'nbjet_loose':'loosebjets',
         'lead_jetPt':'p_{T}^{jet0}',
+        'lead_softdrop_mass':'softdrop'
     }
 
 
@@ -109,6 +111,16 @@ def select(setname,year):
     # Now we are ready to define our first variable to plot: lead_jetPt
     a.Define('lead_jetPt','FatJet_pt[jetIdx[0]]')
 
+
+
+
+
+    #ADD SOFT DROP MASS
+    a.Define('lead_softdrop_mass','FatJet_msoftdrop[0]')
+    a.Cut('softdrop_cut','lead_softdrop_mass > 50')
+
+
+
     # To define our second variable, the number of loose b-jets, let's define the b-tagging working points
     # These [loose, medium, tight] working points are for the DeepCSV variable (ranging between 0 and 1) - saved in NanoAOD as Jet_btagDeepB:
     bcut = []
@@ -136,6 +148,8 @@ def select(setname,year):
             hist_tuple = (histname,histname, 10,0,10)
         elif "Pt" in varname :
             hist_tuple = (histname,histname,30,400,2000)
+        elif "softdrop" in varname :
+            hist_tuple = (histname,histname,30,0,300)
         hist = a.GetActiveNode().DataFrame.Histo1D(hist_tuple,varname,'norm') # Project dataframe into a histogram (hist name/binning tuple, variable to plot from dataframe, weight)
         hist.GetValue() # This gets the actual TH1 instead of a pointer to the TH1
         out.Add(varname,hist) # Add it to our group
