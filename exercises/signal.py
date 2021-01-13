@@ -143,7 +143,7 @@ def select(setname,year):
     a.Define('lead_tau21','FatJet_tau1[jetIdx[0]] > 0 ? FatJet_tau2[jetIdx[0]]/FatJet_tau1[jetIdx[0]] : -1') #Don't divide by zero
     a.Define('lead_tau32','FatJet_tau2[jetIdx[0]] > 0 ? FatJet_tau3[jetIdx[0]]/FatJet_tau2[jetIdx[0]] : -1')
     a.Define('lead_deepAK8_Wscore','FatJet_deepTagMD_WvsQCD[jetIdx[0]]')
-    a.Define('lead_deepAK8_topScore','FatJet_deepTagMD_TvsQCD[jetIdx[0]]')
+    a.Define('lead_deepAK8_topscore','FatJet_deepTagMD_TvsQCD[jetIdx[0]]')
 
     a.Define('sublead_softdrop_mass','FatJet_msoftdrop[jetIdx[1]]')
     a.Define('sublead_jet_pt','FatJet_pt[jetIdx[1]]')
@@ -151,8 +151,8 @@ def select(setname,year):
 
     a.Define('sublead_tau21','FatJet_tau1[jetIdx[1]] > 0 ? FatJet_tau2[jetIdx[1]]/FatJet_tau1[jetIdx[1]] : -1')
     a.Define('sublead_tau32','FatJet_tau2[jetIdx[1]] > 0 ? FatJet_tau3[jetIdx[1]]/FatJet_tau2[jetIdx[1]] : -1')
-    a.Define('sublead_deepAK8_Wscore','FatJet_deepTagMD_WvsQCD[jetIdx[0]]')
-    a.Define('sublead_deepAK8_topScore','FatJet_deepTagMD_TvsQCD[jetIdx[1]]')
+    a.Define('sublead_deepAK8_Wscore','FatJet_deepTagMD_WvsQCD[jetIdx[1]]')
+    a.Define('sublead_deepAK8_topscore','FatJet_deepTagMD_TvsQCD[jetIdx[1]]')
 
     a.Define('lead_vector', 'hardware::TLvector(FatJet_pt[jetIdx[0]],FatJet_eta[jetIdx[0]],FatJet_phi[jetIdx[0]],FatJet_mass[jetIdx[0]])')
     a.Define('sublead_vector','hardware::TLvector(FatJet_pt[jetIdx[1]],FatJet_eta[jetIdx[1]],FatJet_phi[jetIdx[1]],FatJet_mass[jetIdx[1]])')
@@ -194,16 +194,16 @@ def select(setname,year):
         elif "lead_tau21" in varname :
             hist_tuple = (histname,histname,30,0,1)
         elif "lead_tau2" in varname :
-            hist_tuple = (histname,histname,30,0,50)
+            hist_tuple = (histname,histname,30,0,1)
         elif "lead_tau32" in varname :
             hist_tuple = (histname,histname,30,0,1)
         elif "lead_deepAK8_Wscore" in varname :
-            hist_tuple = (histname,histname,30,0,50)
+            hist_tuple = (histname,histname,30,0,1)
         elif "lead_deepAK8_topscore" in varname :
-            hist_tuple = (histname,histname,30,0,50)
+            hist_tuple = (histname,histname,30,0,1)
         elif "Mass" in varname :
-            hist_tuple = (histname,histname,30,400,2000)
-
+            hist_tuple = (histname,histname,30,0,3000)
+      #  print(varname)    
         hist = a.GetActiveNode().DataFrame.Histo1D(hist_tuple,varname,'norm') # Project dataframe into a histogram (hist name/binning tuple, variable to plot from dataframe, weight)
         hist.GetValue() # This gets the actual TH1 instead of a pointer to the TH1
         out.Add(varname,hist) # Add it to our group
