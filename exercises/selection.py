@@ -145,6 +145,11 @@ def select(setname,year):
     a.Define('lead_deepAK8_WvsQCD','FatJet_deepTag_WvsQCD[jetIdx[0]]')
     a.Define('sublead_deepAK8_WvsQCD','FatJet_deepTag_WvsQCD[jetIdx[1]]')
 
+    a.Define('lead_deepAK8_TvsQCD','FatJet_deepTagMD_H4qvsQCD[jetIdx[0]]')
+    a.Define('sublead_deepAK8_TvsQCD','FatJet_deepTagMD_H4qvsQCD[jetIdx[1]]')
+    a.Define('lead_deepAK8_WvsQCD','FatJet_deepTagMD_HbbvsQCD[jetIdx[0]]')
+    a.Define('sublead_deepAK8_WvsQCD','FatJet_deepTagMD_HbbvsQCD[jetIdx[1]]')
+
     bcut = []
     if year == '16' :
         bcut = [0.2217,0.6321,0.8953]
