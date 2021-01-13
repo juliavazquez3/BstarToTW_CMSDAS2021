@@ -68,8 +68,22 @@ else:
 
 varnames = {
         'nbjet_loose':'loosebjets',
-        'lead_jetPt':'p_{T}^{jet0}',
-        'lead_softdrop_mass':'softdrop'
+        'lead_jetPt':'lead_jet_pt',
+        'lead_softdrop_mass':'lead_softdrop_mass',
+    'lead_jet_pt_nom':'lead_jet_pt_nom',
+    'lead_tau2':"lead_tau2",
+    'lead_tau21':'lead_tau21',
+    'lead_tau32':'lead_tau32',
+    'lead_deepAK8_Wscore':'lead_deepAK8_Wscore',
+    'lead_deepAK8_topscore':'lead_deepAK8_topscore',
+   'sublead_jet_pt':'sublead_jet_pt',
+        'sublead_softdrop_mass':'sublead_softdrop_mass',
+    'sublead_jet_pt_nom':'sublead_jet_pt_nom',
+    'sublead_tau21':'sublead_tau21',
+    'sublead_tau32':'sublead_tau32',
+    'sublead_deepAK8_Wscore':'sublead_deepAK8_Wscore',
+    'sublead_deepAK8_topscore':'sublead_deepAK8_topscore',
+    'invariantMass':'invariantMass'
     }
 
 
@@ -118,8 +132,32 @@ def select(setname,year):
 
 
     #ADD SOFT DROP MASS
-    a.Define('lead_softdrop_mass','FatJet_msoftdrop[0]')
+    a.Define('lead_softdrop_mass','FatJet_msoftdrop[jetIdx[0]]')
     a.Cut('softdrop_cut','lead_softdrop_mass > 50')
+
+#EX 2 ADD MORE VARS
+  #  a.Define('lead_jet_pt','FatJet_pt[jetIdx[0]]')
+    a.Define('lead_jet_pt_nom','FatJet_pt_nom[jetIdx[0]]')
+    a.Define('lead_tau2','FatJet_tau2')
+ 
+    a.Define('lead_tau21','FatJet_tau1[jetIdx[0]] > 0 ? FatJet_tau2[jetIdx[0]]/FatJet_tau1[jetIdx[0]] : -1') #Don't divide by zero
+    a.Define('lead_tau32','FatJet_tau2[jetIdx[0]] > 0 ? FatJet_tau3[jetIdx[0]]/FatJet_tau2[jetIdx[0]] : -1')
+    a.Define('lead_deepAK8_Wscore','FatJet_deepTagMD_WvsQCD[jetIdx[0]]')
+    a.Define('lead_deepAK8_topScore','FatJet_deepTagMD_TvsQCD[jetIdx[0]]')
+
+    a.Define('sublead_softdrop_mass','FatJet_msoftdrop[jetIdx[1]]')
+    a.Define('sublead_jet_pt','FatJet_pt[jetIdx[1]]')
+    a.Define('sublead_jet_pt_nom','FatJet_pt_nom[jetIdx[1]]')
+
+    a.Define('sublead_tau21','FatJet_tau1[jetIdx[1]] > 0 ? FatJet_tau2[jetIdx[1]]/FatJet_tau1[jetIdx[1]] : -1')
+    a.Define('sublead_tau32','FatJet_tau2[jetIdx[1]] > 0 ? FatJet_tau3[jetIdx[1]]/FatJet_tau2[jetIdx[1]] : -1')
+    a.Define('sublead_deepAK8_Wscore','FatJet_deepTagMD_WvsQCD[jetIdx[0]]')
+    a.Define('sublead_deepAK8_topScore','FatJet_deepTagMD_TvsQCD[jetIdx[1]]')
+
+    a.Define('lead_vector', 'hardware::TLvector(FatJet_pt[jetIdx[0]],FatJet_eta[jetIdx[0]],FatJet_phi[jetIdx[0]],FatJet_mass[jetIdx[0]])')
+    a.Define('sublead_vector','hardware::TLvector(FatJet_pt[jetIdx[1]],FatJet_eta[jetIdx[1]],FatJet_phi[jetIdx[1]],FatJet_mass[jetIdx[1]])')
+    a.Define('invariantMass','hardware::invariantMass({lead_vector,sublead_vector})')
+
 
 
 
@@ -139,6 +177,7 @@ def select(setname,year):
     a.Define('norm',str(norm))
 
     # A nice functionality of TIMBER is to print all the selections that we have done:
+
     a.PrintNodeTree(plotdir+'/signal_tree.dot',verbose=True)
 
     # Now we are ready to save histograms (in a HistGroup)
@@ -148,10 +187,23 @@ def select(setname,year):
         # Arguments for binning that you would normally pass to a TH1 (histname, histname, number of bins, min bin, max bin)
         if "nbjet" in varname :
             hist_tuple = (histname,histname, 10,0,10)
-        elif "Pt" in varname :
+        elif "lead_jet" in varname :
             hist_tuple = (histname,histname,30,400,2000)
-        elif "softdrop" in varname :
+        elif "lead_softdrop" in varname :
             hist_tuple = (histname,histname,30,0,300)
+        elif "lead_tau21" in varname :
+            hist_tuple = (histname,histname,30,0,1)
+        elif "lead_tau2" in varname :
+            hist_tuple = (histname,histname,30,0,50)
+        elif "lead_tau32" in varname :
+            hist_tuple = (histname,histname,30,0,1)
+        elif "lead_deepAK8_Wscore" in varname :
+            hist_tuple = (histname,histname,30,0,50)
+        elif "lead_deepAK8_topscore" in varname :
+            hist_tuple = (histname,histname,30,0,50)
+        elif "Mass" in varname :
+            hist_tuple = (histname,histname,30,400,2000)
+
         hist = a.GetActiveNode().DataFrame.Histo1D(hist_tuple,varname,'norm') # Project dataframe into a histogram (hist name/binning tuple, variable to plot from dataframe, weight)
         hist.GetValue() # This gets the actual TH1 instead of a pointer to the TH1
         out.Add(varname,hist) # Add it to our group
