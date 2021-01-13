@@ -42,9 +42,42 @@ CompileCpp('bstar.cc')
 
 # define sample sets that we want to process, label them and define colors
 # here we are only going to work with a single signal dataset
-signal_names = ['signalLH2000']
-names = {'signalLH2000': "b*_{LH} 2000 (GeV)"}
-colors = {'signalLH2000': ROOT.kBlue}
+#signal_names = ['signalLH2000']
+#names = {'signalLH2000': "b*_{LH} 2000 (GeV)"}
+#colors = {'signalLH2000': ROOT.kBlue}
+
+#####################COPY PASTE FROM SELECTION.PY#######################
+# Sets we want to process and some nice naming for our plots
+signal_names = ['signalLH%s'%(mass) for mass in range(1400,4200,600)]
+bkg_names = ['singletop_tW','singletop_tWB','ttbar','QCDHT700','QCDHT1000','QCDHT1500','QCDHT2000']
+names = {
+    "singletop_tW":"single top (tW)",
+    "singletop_tWB":"single top (tW)",
+    "ttbar":"t#bar{t}",
+    "QCDHT700":"QCD",
+    "QCDHT1000":"QCD",
+    "QCDHT1500":"QCD",
+    "QCDHT2000":"QCD",
+    "QCD":"QCD",
+    "singletop":"single top (tW)"
+}
+for sig in signal_names:
+    names[sig] = "b*_{LH} %s (GeV)"%(sig[-4:])
+# ... and some nice colors
+colors = {}
+for p in signal_names+bkg_names:
+    if 'signal' in p:
+        colors[p] = ROOT.kCyan-int((int(p[-4:])-1400)/600)
+    elif 'ttbar' in p:
+        colors[p] = ROOT.kRed
+    elif 'singletop' in p:
+        colors[p] = ROOT.kBlue
+    elif 'QCD' in p:
+        colors[p] = ROOT.kYellow
+colors["QCD"] = ROOT.kYellow
+colors["singletop"] = ROOT.kBlue
+####################################END COPY PASTE###########################
+
 
 # define some filters that we will use later: here are MET filter names and Trigger path names
 # MET Flags - https://twiki.cern.ch/twiki/bin/view/CMS/MissingETOptionalFiltersRun2
@@ -133,7 +166,7 @@ def select(setname,year):
 
     #ADD SOFT DROP MASS
     a.Define('lead_softdrop_mass','FatJet_msoftdrop[jetIdx[0]]')
-    a.Cut('softdrop_cut','lead_softdrop_mass > 50')
+#    a.Cut('softdrop_cut','lead_softdrop_mass > 50')
 
 #EX 2 ADD MORE VARS
   #  a.Define('lead_jet_pt','FatJet_pt[jetIdx[0]]')
@@ -143,7 +176,7 @@ def select(setname,year):
     a.Define('lead_tau21','FatJet_tau1[jetIdx[0]] > 0 ? FatJet_tau2[jetIdx[0]]/FatJet_tau1[jetIdx[0]] : -1') #Don't divide by zero
     a.Define('lead_tau32','FatJet_tau2[jetIdx[0]] > 0 ? FatJet_tau3[jetIdx[0]]/FatJet_tau2[jetIdx[0]] : -1')
     a.Define('lead_deepAK8_Wscore','FatJet_deepTagMD_WvsQCD[jetIdx[0]]')
-    a.Define('lead_deepAK8_topScore','FatJet_deepTagMD_TvsQCD[jetIdx[0]]')
+    a.Define('lead_deepAK8_topscore','FatJet_deepTagMD_TvsQCD[jetIdx[0]]')
 
     a.Define('sublead_softdrop_mass','FatJet_msoftdrop[jetIdx[1]]')
     a.Define('sublead_jet_pt','FatJet_pt[jetIdx[1]]')
@@ -151,8 +184,8 @@ def select(setname,year):
 
     a.Define('sublead_tau21','FatJet_tau1[jetIdx[1]] > 0 ? FatJet_tau2[jetIdx[1]]/FatJet_tau1[jetIdx[1]] : -1')
     a.Define('sublead_tau32','FatJet_tau2[jetIdx[1]] > 0 ? FatJet_tau3[jetIdx[1]]/FatJet_tau2[jetIdx[1]] : -1')
-    a.Define('sublead_deepAK8_Wscore','FatJet_deepTagMD_WvsQCD[jetIdx[0]]')
-    a.Define('sublead_deepAK8_topScore','FatJet_deepTagMD_TvsQCD[jetIdx[1]]')
+    a.Define('sublead_deepAK8_Wscore','FatJet_deepTagMD_WvsQCD[jetIdx[1]]')
+    a.Define('sublead_deepAK8_topscore','FatJet_deepTagMD_TvsQCD[jetIdx[1]]')
 
     a.Define('lead_vector', 'hardware::TLvector(FatJet_pt[jetIdx[0]],FatJet_eta[jetIdx[0]],FatJet_phi[jetIdx[0]],FatJet_mass[jetIdx[0]])')
     a.Define('sublead_vector','hardware::TLvector(FatJet_pt[jetIdx[1]],FatJet_eta[jetIdx[1]],FatJet_phi[jetIdx[1]],FatJet_mass[jetIdx[1]])')
@@ -188,22 +221,22 @@ def select(setname,year):
         if "nbjet" in varname :
             hist_tuple = (histname,histname, 10,0,10)
         elif "lead_jet" in varname :
-            hist_tuple = (histname,histname,30,400,2000)
+            hist_tuple = (histname,histname,30,0,3000)
         elif "lead_softdrop" in varname :
             hist_tuple = (histname,histname,30,0,300)
         elif "lead_tau21" in varname :
             hist_tuple = (histname,histname,30,0,1)
         elif "lead_tau2" in varname :
-            hist_tuple = (histname,histname,30,0,50)
+            hist_tuple = (histname,histname,30,0,1)
         elif "lead_tau32" in varname :
             hist_tuple = (histname,histname,30,0,1)
         elif "lead_deepAK8_Wscore" in varname :
-            hist_tuple = (histname,histname,30,0,50)
+            hist_tuple = (histname,histname,30,0,1)
         elif "lead_deepAK8_topscore" in varname :
-            hist_tuple = (histname,histname,30,0,50)
+            hist_tuple = (histname,histname,30,0,1)
         elif "Mass" in varname :
-            hist_tuple = (histname,histname,30,400,2000)
-
+            hist_tuple = (histname,histname,50,0,5000)
+      #  print(varname)    
         hist = a.GetActiveNode().DataFrame.Histo1D(hist_tuple,varname,'norm') # Project dataframe into a histogram (hist name/binning tuple, variable to plot from dataframe, weight)
         hist.GetValue() # This gets the actual TH1 instead of a pointer to the TH1
         out.Add(varname,hist) # Add it to our group
